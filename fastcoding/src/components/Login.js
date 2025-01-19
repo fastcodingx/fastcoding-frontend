@@ -1,7 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import "../styles/Login.css";
+import { FcGoogle } from "react-icons/fc";
+import { Link } from "react-router-dom";
+
 
 const Login = () => {
-  return <div>Login</div>;
+  return (
+    <div className="login-main-container">
+      <div className="login-content">
+        <div className="login-content-1">
+          <p>Please enter your details</p>
+          <div className="login-content-input-1">
+            <input name="email" placeholder="Enter Email ID" />
+          </div>
+          <div className="login-content-input-1">
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter Password"
+            />
+          </div>
+          <button className="login-content-btn">
+            Login
+          </button>
+
+          <div className="login-footer-content">
+            <div className="login-content-google">
+              <p style={{fontSize:"20px"}}>Sign in with Google</p>
+              <FcGoogle style={{ height: "30px", width: "30px" }} />
+            </div>
+            <p style={{ marginTop: "20px",color:"var(--secondary)",fontSize:"20px" }}>
+              Don't have an account?{" "}
+              <Link to={"/register"} className="login-forgot">
+                Register
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
