@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+   const [isOpen, setIsOpen] = useState(true); // State to manage modal visibility
+   const navigate = useNavigate();
+  
+    const handleOverlayClick = (e) => {
+      if (e.target.classList.contains("login-main-container")) {
+        setIsOpen(false);
+        navigate("/")
+      }
+    };
+  
+    if (!isOpen) return null; // Don't render the modal if it's closed
+ 
   return (
-    <div className="login-main-container">
+    <div className="login-main-container" onClick={handleOverlayClick}>
       <div className="login-content">
         <div className="login-content-1">
           <p>Please enter your details</p>

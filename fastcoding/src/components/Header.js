@@ -5,7 +5,7 @@ import Logo from "../assets/FastCoding.png";
 
 function Header() {
   const navigate = useNavigate();
-
+  
   const handleNavigation = (path) => {
     navigate(path);
   };
@@ -17,7 +17,7 @@ function Header() {
       </div>
       <nav className="navLinks">
         <div className="navIcons">
-          <FaBookmark
+          {/* <FaBookmark
             size={24}
             className="icon"
             onClick={() => handleNavigation("/bookmark")}
@@ -26,7 +26,7 @@ function Header() {
             size={28}
             className="icon"
             onClick={() => handleNavigation("/cart")}
-          />
+          /> */}
           <button
             className="authButton"
             onClick={() => handleNavigation("/register")}

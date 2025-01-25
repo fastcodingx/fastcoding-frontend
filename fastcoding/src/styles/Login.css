@@ -1,14 +1,23 @@
 .login-main-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: auto;
   padding-top: 50px;
   padding-bottom: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1001;
 }
 
 .login-content {
-  width: 60%;
+  position: absolute;
+  width: 40%;
   margin: auto;
   padding: 30px;
   border-radius: 20px;
