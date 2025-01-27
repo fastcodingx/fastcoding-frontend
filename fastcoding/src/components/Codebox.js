@@ -15,38 +15,6 @@ const CodeBox = ({ code, language, css }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const formatCode = (code) => {
-    let indentLevel = 0; // To keep track of the current indentation level
-
-    return code
-      .replace(/;\s*/g, ";\n") // Add new line after semicolons
-      .replace(/({|})/g, "\n$1\n") // Add new lines around braces
-      .replace(/>\s*</g, ">\n<") // Add new lines between tags
-      .replace(/(\(\s*|\{\s*)/g, "$1\n") // New line after opening parentheses or braces
-      .replace(/(\s*\))/g, "\n$1") // New line before closing parentheses
-      .replace(/=>\s*/g, " =>\n") // New line after arrow functions
-
-      .split("\n")
-      .map((line) => {
-        const trimmedLine = line.trim();
-
-        // Adjust indentation based on the presence of opening and closing braces
-        if (trimmedLine.endsWith("{")) {
-          indentLevel++;
-        } else if (trimmedLine.startsWith("}")) {
-          indentLevel = Math.max(0, indentLevel - 1);
-        }
-
-        // Apply indentation to the current line
-        return " ".repeat(indentLevel * 2) + trimmedLine; // 2 spaces per indent level
-      })
-      .filter((line) => line.length > 0) // Remove empty lines
-      .join("\n"); // Join back into a single string
-  };
-
-  const formattedCode = formatCode(code);
-  const formattedCSS = formatCode(css);
-
   return (
     <div
       style={{
@@ -61,8 +29,7 @@ const CodeBox = ({ code, language, css }) => {
         wrapLines={true}
         customStyle={{ borderRadius: "10px", padding: "10px" }}
       >
-        {/* {showCode == "Code" ? code : css} */}
-        {showCode === "Code" ? formattedCode : formattedCSS}
+        {showCode === "Code" ? code : css}
       </SyntaxHighlighter>
       {showCode === "CSS" && (
         <button

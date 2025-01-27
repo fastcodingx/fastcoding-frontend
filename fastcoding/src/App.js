@@ -6,9 +6,11 @@ import Bookmark from "./components/Bookmark";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Cart from "./components/Cart";
+import { CategoryProvider } from "./components/CategoryContext";
 
 function App() {
   return (
+    <CategoryProvider>
     <div className="app">
       <Header />
       <div className="main-container">
@@ -24,6 +26,7 @@ function App() {
         </div>
       </div>
     </div>
+    </CategoryProvider>
   );
 }
 

@@ -5,12 +5,7 @@ import CodeBox from "./Codebox";
 const CodeCard = ({ code, index, language }) => {
   return (
     <div className="code-card" key={index}>
-      <img
-        src={code.image}
-        alt="Code Preview"
-        className="code-card-image"
-        style={{ width: "1000px" }}
-      />
+      <img src={code.image} alt="Code Preview" className="code-card-image" />
       <div className="code-card-content">
         <h2>Steps to Follow</h2>
         <ol className="code-card-steps">

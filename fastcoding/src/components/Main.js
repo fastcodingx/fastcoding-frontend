@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import "../styles/Main.css";
 import CodeCard from "./CodeCard";
 import API_URL from "../config";
+import { useCategory } from "./CategoryContext";
+import Loading from "./Loading";
 
 const Main = () => {
   const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { selectedCategory, selectedSubcategory } = useCategory();
 
-  const category = "React";
-  const subcategory = "Header";
   const fetchCategory = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `${API_URL}/content/options/${category}/${subcategory}`
+        `${API_URL}/content/options/${selectedCategory || "React"}/${selectedSubcategory || "Header"}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch categories");
@@ -20,23 +23,29 @@ const Main = () => {
       setOptions(data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCategory();
-  }, []);
+  }, [selectedCategory, selectedSubcategory]);
 
-  const language = "javascript"
+  const language = "javascript";
 
   return (
     <div className="mainContainer">
-      {options.map((code, index) => (
-        <>
-          <CodeCard code={code} index={index} language={language} />
-          <hr style={{ border: "2px solid var(--primary)" }}></hr>
-        </>
-      ))}
+      {loading ? (
+        <Loading />
+      ) : (
+        options.map((code, index) => (
+          <React.Fragment key={index}>
+            <CodeCard code={code} index={index} language={language} />
+            <hr style={{ border: "1px solid black" }}></hr>
+          </React.Fragment>
+        ))
+      )}
     </div>
   );
 };

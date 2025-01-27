@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import API_URL from "../config";
+import { useNavigate } from "react-router-dom";
 
 import "../styles/Sidebar.css";
 import { FaReact } from "react-icons/fa";
+import { useCategory } from "./CategoryContext";
 
 function Sidebar() {
-  const [activeItem, setActiveItem] = useState("HTML");
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const { updateCategory } = useCategory();
+  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState("React");
+  const [openDropdown, setOpenDropdown] = useState({});
   const [category, setCategory] = useState([]);
 
   const fetchCategory = async () => {
@@ -18,6 +22,13 @@ function Sidebar() {
       }
       const data = await response.json();
       setCategory(data);
+
+      // Initialize all dropdowns as open
+      const defaultOpen = data.reduce((acc, curr) => {
+        acc[curr.category] = true;
+        return acc;
+      }, {});
+      setOpenDropdown(defaultOpen);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -27,37 +38,51 @@ function Sidebar() {
     fetchCategory();
   }, []);
 
-  const handleClick = (id) => {
-    if (openDropdown === id) {
-      setOpenDropdown(null);
-    } else {
-      setOpenDropdown(id);
-    }
-    setActiveItem(id);
+  const handleClick = (categoryName) => {
+    setActiveItem(categoryName);
+    updateCategory(categoryName, null);
+
+    // Toggle dropdown open/close
+    setOpenDropdown((prev) => ({
+      ...prev,
+      [categoryName]: !prev[categoryName],
+    }));
+  };
+
+  const handleSubcategoryClick = (subcategoryName) => {
+    updateCategory(activeItem, subcategoryName);
+    navigate("/");
   };
 
   return (
     <div className="sidebar">
       <ul>
         {category.map((el, id) => (
-          <li key={id} className={activeItem === id ? "active" : ""}>
-            <div onClick={() => handleClick(id)} className="sidebar-item">
+          <li key={id} className={activeItem === el.category ? "active" : ""}>
+            <div
+              onClick={() => handleClick(el?.category)}
+              className="sidebar-item"
+            >
               <FaReact />
               {el?.category}
               {el?.subcategories?.length > 0 && (
                 <span
                   className={`dropdown-arrow ${
-                    openDropdown === id ? "rotate" : ""
+                    openDropdown[el.category] ? "rotate" : ""
                   }`}
                 >
                   <IoIosArrowDown />
                 </span>
               )}
             </div>
-            {openDropdown === id && el?.subcategories.length > 0 && (
+            {openDropdown[el.category] && el?.subcategories?.length > 0 && (
               <ul className="dropdown">
                 {el?.subcategories.map((option, index) => (
-                  <li key={index} className="dropdown-item">
+                  <li
+                    key={index}
+                    className="dropdown-item"
+                    onClick={() => handleSubcategoryClick(option?.name)}
+                  >
                     {option?.name}
                   </li>
                 ))}

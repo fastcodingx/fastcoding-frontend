@@ -5,7 +5,7 @@ import Logo from "../assets/FastCoding.png";
 
 function Header() {
   const navigate = useNavigate();
-  
+
   const handleNavigation = (path) => {
     navigate(path);
   };
