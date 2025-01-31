@@ -1,7 +1,17 @@
+@font-face {
+  font-family: "Aptos";
+  src: url(/aptos-font/aptos.ttf);
+}
+@font-face {
+  font-family: "Aptos-bold";
+  src: url(/aptos-font/aptos-bold.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Aptos", sans-serif;
 }
 
 .app {

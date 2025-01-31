@@ -1,4 +1,5 @@
 .code-card {
+  position: relative;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -46,4 +47,52 @@ pre {
   font-size: 14px;
   line-height: 1.5;
   white-space: pre-wrap;
+}
+.card-cart-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 30px;
+  background-color: var(--primary);
+  color: #fff;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+}
+
+.card-cart-icon:hover {
+  background-color: var(--secondary);
+  color: var(--primary);
+  transition:
+    color 0.3s,
+    background-color 0.8s;
+}
+
+.addtocart-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+  margin: 20px 0px;
+}
+.addtocart-card > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 50px;
+  border: 1px solid var(--primary);
+  outline: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: 600;
+  justify-content: center;
+  font-size: 16px;
+  background-color: transparent;
+  color: var(--primary);
+}
+.addtocart-card > button:hover {
+  background-color: var(--primary);
+  color: #fff;
 }

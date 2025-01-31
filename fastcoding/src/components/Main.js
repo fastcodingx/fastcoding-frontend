@@ -42,7 +42,9 @@ const Main = () => {
         options.map((code, index) => (
           <React.Fragment key={index}>
             <CodeCard code={code} index={index} language={language} />
-            <hr style={{ border: "1px solid black" }}></hr>
+            {index !== options.length - 1 && (
+              <hr style={{ border: "1px solid black" }} />
+            )}
           </React.Fragment>
         ))
       )}

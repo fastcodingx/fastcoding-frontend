@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import API_URL from "../config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import "../styles/Sidebar.css";
 import { FaReact } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { useCategory } from "./CategoryContext";
 function Sidebar() {
   const { updateCategory } = useCategory();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState("React");
   const [openDropdown, setOpenDropdown] = useState({});
   const [category, setCategory] = useState([]);
@@ -53,6 +54,18 @@ function Sidebar() {
     updateCategory(activeItem, subcategoryName);
     navigate("/");
   };
+
+  const hiddenRoutes = [
+    "/termsandcondition",
+    "/privacypolicy",
+    "/aboutus",
+    "/getintouch",
+    "/myaccount",
+    "/mybookmark",
+  ];
+  if (hiddenRoutes.includes(location.pathname)) {
+    return null;
+  }
 
   return (
     <div className="sidebar">

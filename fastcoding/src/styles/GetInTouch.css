@@ -1,0 +1,94 @@
+.get-in-touch-container {
+  max-width: 500px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.get-in-touch-container h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.get-in-touch-container p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+textarea {
+  height: 100px;
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition:
+    color 0.3s,
+    background-color 0.8s;
+  border: 1px solid var(--primary);
+}
+
+button:hover {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 16px;
+  color: gray;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.contact-item:hover {
+  color: var(--primary);
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.whatsapp-icon {
+  color: #25d366;
+}
+
+.email-icon {
+  color: #a5342a;
+}
