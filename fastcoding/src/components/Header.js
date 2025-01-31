@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { FaHandshake } from "react-icons/fa";
+import { FaHandshake, FaUserPlus } from "react-icons/fa";
 import "../styles/Header.css";
 import Logo from "../assets/FastCoding.png";
 import { GoSearch } from "react-icons/go";
 import { MdAccountCircle } from "react-icons/md";
 import { IoMdBookmark } from "react-icons/io";
+import { FiLogIn } from "react-icons/fi";
 
 function Header() {
   const navigate = useNavigate();
@@ -58,12 +59,22 @@ function Header() {
                 className="authButton"
                 onClick={() => handleNavigation("/register")}
               >
+                <FaUserPlus
+                  size={22}
+                  className="icon"
+                  style={{ marginRight: 8 }}
+                />
                 Register
               </button>
               <button
                 className="authButton"
                 onClick={() => handleNavigation("/login")}
               >
+                <FiLogIn
+                  size={22}
+                  className="icon"
+                  style={{ marginRight: 8 }}
+                />
                 Login
               </button>
             </>

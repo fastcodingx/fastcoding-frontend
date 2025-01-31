@@ -119,7 +119,8 @@
 
 .myBookmarkBtn,
 .myAccountBtn,
-.getInTouchBtn {
+.getInTouchBtn,
+.authButton {
   display: flex;
   align-items: center;
   margin-right: 10px;
