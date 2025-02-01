@@ -4,11 +4,13 @@ import CodeCard from "./CodeCard";
 import Loading from "./Loading";
 import API_URL from "../config";
 import "../styles/MyAccount.css";
+import { useUser } from "./UserContext";
 
 const MyAccount = () => {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("profile");
+  const { user, logout } = useUser();
 
   const [messages, setMessages] = useState([
     {
@@ -157,26 +159,30 @@ const MyAccount = () => {
             <div className="profile-info">
               <div>
                 <label>Username:</label>
-                <input type="text" value="moin6k" readOnly />
+                <input
+                  type="text"
+                  value={user?.email?.split("@")[0] || "username"}
+                  readOnly
+                />
               </div>
               <div>
                 <label>Email:</label>
-                <input type="email" value="moin6k@gmail.com" readOnly />
+                <input type="email" value={user?.email || "email"} readOnly />
               </div>
               <div style={{ marginTop: 14, marginBottom: 10 }}>
                 <h3>Change your password to keep your account secure</h3>
               </div>
               <div>
                 <label>Old Password:</label>
-                <input type="password" value="12345678" />
+                <input type="password" value="" />
               </div>
               <div>
                 <label>New Password:</label>
-                <input type="password" value="12345678" />
+                <input type="password" value="" />
               </div>
               <div>
                 <label>New Confirm Password:</label>
-                <input type="password" value="12345678" />
+                <input type="password" value="" />
               </div>
               <div className="saveChangesBtn">
                 <button>Update Profile</button>
@@ -243,7 +249,7 @@ const MyAccount = () => {
         {activeSection === "logout" && (
           <div className="logout-content">
             <h2>Are you sure you want to log out?</h2>
-            <button>
+            <button onClick={() => logout()}>
               <FaSignOutAlt />
               Logout
             </button>

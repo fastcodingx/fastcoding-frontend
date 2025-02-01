@@ -70,6 +70,15 @@ pre {
     background-color 0.8s;
 }
 
+.bookmarked-icon {
+  transition: background-color 0.3s ease;
+}
+
+.bookmarked-icon:hover {
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
 .addtocart-card {
   display: flex;
   align-items: center;

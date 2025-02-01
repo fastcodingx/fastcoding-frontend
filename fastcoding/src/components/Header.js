@@ -6,14 +6,15 @@ import { GoSearch } from "react-icons/go";
 import { MdAccountCircle } from "react-icons/md";
 import { IoMdBookmark } from "react-icons/io";
 import { FiLogIn } from "react-icons/fi";
+import { useUser } from "./UserContext";
 
 function Header() {
   const navigate = useNavigate();
-
+  const { user } = useUser();
   const handleNavigation = (path) => {
     navigate(path);
   };
-  const isLogin = true;
+
   return (
     <div className="headerContainer">
       <div className="logo" onClick={() => handleNavigation("/")}>
@@ -39,7 +40,7 @@ function Header() {
             />
             Get in Touch
           </button>
-          {isLogin && (
+          {user && (
             <button
               className="myBookmarkBtn"
               onClick={() => handleNavigation("/mybookmark")}
@@ -52,7 +53,7 @@ function Header() {
               My Bookmarks
             </button>
           )}
-          {!isLogin && (
+          {!user && (
             <>
               <button
                 style={{ marginRight: 10 }}
@@ -80,7 +81,7 @@ function Header() {
             </>
           )}
         </div>
-        {isLogin && (
+        {user && (
           <div>
             <button
               className="myAccountBtn"

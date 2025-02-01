@@ -11,6 +11,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy.js";
 import AboutUs from "./components/AboutUs.js";
 import MyAccount from "./components/MyAccount.js";
 import { CategoryProvider } from "./components/CategoryContext";
+import { UserProvider } from "./components/UserContext.js";
 import Footer from "./components/Footer.js";
 
 function App() {
@@ -26,31 +27,36 @@ function App() {
   ];
   let flag = hiddenRoutes.includes(location.pathname);
   return (
-    <CategoryProvider>
-      <div className="app">
-        <Header />
-        <div className="main-container">
-          <Sidebar />
-          <div className="content" style={{ marginLeft: flag ? "0" : "290px" }}>
-            <Routes>
-              <Route path="/" element={<Main />} />
-              <Route path="/mybookmark" element={<Bookmark />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/myaccount" element={<MyAccount />} />
-              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-              <Route
-                path="/termsandcondition"
-                element={<TermsAndConditions />}
-              />
-              <Route path="/aboutus" element={<AboutUs />} />
-              <Route path="/getintouch" element={<GetInTouch />} />
-            </Routes>
+    <UserProvider>
+      <CategoryProvider>
+        <div className="app">
+          <Header />
+          <div className="main-container">
+            <Sidebar />
+            <div
+              className="content"
+              style={{ marginLeft: flag ? "0" : "290px" }}
+            >
+              <Routes>
+                <Route path="/" element={<Main />} />
+                <Route path="/mybookmark" element={<Bookmark />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/myaccount" element={<MyAccount />} />
+                <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+                <Route
+                  path="/termsandcondition"
+                  element={<TermsAndConditions />}
+                />
+                <Route path="/aboutus" element={<AboutUs />} />
+                <Route path="/getintouch" element={<GetInTouch />} />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
         </div>
-      </div>
-    </CategoryProvider>
+      </CategoryProvider>
+    </UserProvider>
   );
 }
 

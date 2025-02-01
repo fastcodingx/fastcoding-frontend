@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../styles/GetInTouch.css";
 import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import emailjs from "emailjs-com";
+import API_URL from "../config";
 
 const GetInTouch = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +19,44 @@ const GetInTouch = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message Sent! We will get back to you soon.");
+
+    try {
+      const emailRes = await emailjs.send(
+        "service_46mmahu",
+        "template_826cp7r",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: "Admin",
+        },
+        "-1_ezH5veZ-0NOZ96"
+      );
+
+      if (emailRes.status === 200) {
+        const response = await fetch(`${API_URL}/contact/addcontact`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          alert("Your issue has been submitted successfully!");
+          setFormData({ name: "", email: "", message: "" });
+        } else {
+          throw new Error("Failed to store contact in database");
+        }
+      } else {
+        throw new Error("Failed to send email");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (

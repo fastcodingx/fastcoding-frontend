@@ -39,7 +39,7 @@ const Main = () => {
       {loading ? (
         <Loading />
       ) : (
-        options.map((code, index) => (
+        options?.map((code, index) => (
           <React.Fragment key={index}>
             <CodeCard code={code} index={index} language={language} />
             {index !== options.length - 1 && (
