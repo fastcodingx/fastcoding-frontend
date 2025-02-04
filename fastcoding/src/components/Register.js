@@ -15,6 +15,9 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpValidated, setOtpValidated] = useState(false);
+  const [otp, setOtp] = useState("");
 
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("login-main-container")) {
@@ -27,10 +30,56 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSendOtp = async () => {
+    setError("");
+    try {
+      const response = await fetch(`${API_URL}/auth/otp/send-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || "Failed to send OTP.");
+        return;
+      }
+      alert("OTP sent successfully!");
+      setOtpSent(true);
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleValidateOtp = async () => {
+    setError("");
+    try {
+      const response = await fetch(`${API_URL}/auth/otp/validate-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: formData.email, otp }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || "Invalid OTP.");
+        return;
+      }
+      alert("OTP validated successfully!");
+      setOtpValidated(true);
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+     if(!otpValidated){
+      alert("Please Validate Otp!")
+     }
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -49,15 +98,12 @@ const Register = () => {
           password: formData.password,
         }),
       });
-
       const data = await response.json();
       setLoading(false);
-
       if (!response.ok) {
         setError(data.message || "Registration failed.");
         return;
       }
-
       alert("Registration successful! Please login.");
       navigate("/login");
     } catch (error) {
@@ -95,6 +141,32 @@ const Register = () => {
                 required
               />
             </div>
+            {!otpSent ? (
+              <button
+                className="login-content-btn"
+                type="button"
+                onClick={handleSendOtp}
+              >
+                Send OTP
+              </button>
+            ) : (
+              <div>
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                />
+               { !otpValidated && <button
+                  className="login-content-btn"
+                  type="button"
+                  onClick={handleValidateOtp}
+                >
+                  Validate OTP
+                </button>}
+              </div>
+            )}
             <div className="login-content-input-1">
               <input
                 name="password"
@@ -123,23 +195,13 @@ const Register = () => {
               {loading ? "Registering..." : "Register"}
             </button>
           </form>
-
           <div className="login-footer-content">
             <div className="login-content-google">
               <p style={{ fontSize: "20px" }}>Sign in with Google</p>
               <FcGoogle style={{ height: "30px", width: "30px" }} />
             </div>
-            <p
-              style={{
-                marginTop: "20px",
-                color: "var(--secondary)",
-                fontSize: "20px",
-              }}
-            >
-              I have an account?{" "}
-              <Link to={"/login"} className="login-forgot">
-                Login
-              </Link>
+            <p style={{ marginTop: "20px", color: "var(--secondary)", fontSize: "20px" }}>
+              I have an account? <Link to={"/login"} className="login-forgot">Login</Link>
             </p>
           </div>
         </div>

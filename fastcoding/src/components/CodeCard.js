@@ -7,12 +7,12 @@ import API_URL from "../config";
 import { useUser } from "./UserContext";
 
 const CodeCard = ({ code, index, language, setRefresh }) => {
-  const isPaid = true;
   const [bookmark, setBookmark] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [bookmarkId, setBookmarkId] = useState(null);
   const { user } = useUser();
 
+  // Add Bookmark
   const addBookmark = async (codeId) => {
     try {
       const response = await fetch(`${API_URL}/bookmark`, {
@@ -38,7 +38,7 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
     }
   };
 
-  // Remove bookmark
+  // Remove Bookmark
   const removeBookmark = async (bookmarkId) => {
     try {
       const response = await fetch(`${API_URL}/bookmark/${bookmarkId}`, {
@@ -60,6 +60,7 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
     }
   };
 
+  // Get Bookmarks
   const getBookmarks = async () => {
     try {
       const response = await fetch(`${API_URL}/bookmark/user/${user?._id}`);
@@ -94,18 +95,116 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
     }
   };
 
+  // Handle Unlock Code (Payment)
+  const handleUnlockClick = async (codeId) => {
+    console.log("USer",user)
+    console.log("Code Id",codeId)
+    // console.log("Code",code)
+    try {
+      const response = await fetch(`${API_URL}/payment/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: 1, // Amount to unlock (₹100)
+          currency: "INR",
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const options = {
+          key: "rzp_live_Mk06fVMWSXegaY", // Add your Razorpay key here
+          amount: data.amount,
+          currency: data.currency,
+          name: "Fast Coding",
+          description: "Unlock code for ₹100",
+          order_id: data.id,
+          handler: async function (response) {
+            // Payment Success, Now Verify
+            const orderCreated = await fetch(`${API_URL}/order`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body:JSON.stringify({
+                userId:user._id,
+                codeId,
+              })
+            });
+            const res= await orderCreated.json();
+            const verifyResponse = await fetch(`${API_URL}/payment/verify`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: data.id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+           
+            const verificationResult = await verifyResponse.json();
+           console.log("Respi",response)
+            if (verificationResult.success) {
+              await fetch(`${API_URL}/order/updateorder/${res._id}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                 transactionId:response.razorpay_payment_id,
+                  paymentStatus:"success",
+                }),
+              });
+              alert("Payment successful! Code unlocked.");
+            } else {
+              await fetch(`${API_URL}/order/updateorder/${res._id}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                 transactionId:verificationResult.razorpay_payment_id,
+                  paymentStatus:"failed",
+                }),
+              });
+              alert("Payment verification failed.");
+            }
+           
+          },
+          prefill: {
+            name: user.name,
+            email: user.email,
+            contact: user.phone,
+          },
+          theme: {
+            color: "#F37254",
+          },
+        };
+        const razorpayInstance = new window.Razorpay(options);
+        razorpayInstance.open();
+      } else {
+        alert("Failed to initiate payment!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="code-card" key={index}>
       <img src={code.image} alt="Code Preview" className="code-card-image" />
-      {isPaid && (
+      {code?.isPaid ? (
         <div className="addtocart-card">
-          <button>
+          <button onClick={()=>handleUnlockClick(code._id)}>
             <FaUnlock size={20} />
             Unlock Code ₹100
           </button>
         </div>
-      )}
-      {!isPaid && (
+      ) : (
         <div className="code-card-content">
           <h2>Steps to Follow</h2>
           <ol className="code-card-steps">

@@ -11,7 +11,11 @@ const MyAccount = () => {
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("profile");
   const { user, logout } = useUser();
-
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -100,6 +104,47 @@ const MyAccount = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleUpdatePassword = async () => {
+    setError("");
+    setSuccess("");
+
+    if (!oldPassword || !newPassword || !confirmNewPassword) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setError("New password and confirm password do not match.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`${API_URL}/auth/updatepassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.email,
+          oldPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update password.");
+      }
+
+      alert("Password updated successfully.");
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const menuItems = [
     {
       name: "Profile",
@@ -174,18 +219,30 @@ const MyAccount = () => {
               </div>
               <div>
                 <label>Old Password:</label>
-                <input type="password" value="" />
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
               </div>
               <div>
                 <label>New Password:</label>
-                <input type="password" value="" />
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
               </div>
               <div>
-                <label>New Confirm Password:</label>
-                <input type="password" value="" />
+                <label>Confirm New Password:</label>
+                <input
+                  type="password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                />
               </div>
               <div className="saveChangesBtn">
-                <button>Update Profile</button>
+                <button onClick={handleUpdatePassword}>Update Password</button>
               </div>
             </div>
           </div>
