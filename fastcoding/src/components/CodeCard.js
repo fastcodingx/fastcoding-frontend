@@ -6,7 +6,7 @@ import { IoMdBookmark } from "react-icons/io";
 import API_URL from "../config";
 import { useUser } from "./UserContext";
 
-const CodeCard = ({ code, index, language, setRefresh }) => {
+const CodeCard = ({ code, index, language, setRefresh, payed }) => {
   const [bookmark, setBookmark] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [bookmarkId, setBookmarkId] = useState(null);
@@ -97,9 +97,6 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
 
   // Handle Unlock Code (Payment)
   const handleUnlockClick = async (codeId) => {
-    console.log("USer",user)
-    console.log("Code Id",codeId)
-    // console.log("Code",code)
     try {
       const response = await fetch(`${API_URL}/payment/create`, {
         method: "POST",
@@ -107,7 +104,7 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 1, // Amount to unlock (₹100)
+          amount: 1,
           currency: "INR",
         }),
       });
@@ -128,12 +125,12 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body:JSON.stringify({
-                userId:user._id,
+              body: JSON.stringify({
+                userId: user._id,
                 codeId,
-              })
+              }),
             });
-            const res= await orderCreated.json();
+            const res = await orderCreated.json();
             const verifyResponse = await fetch(`${API_URL}/payment/verify`, {
               method: "POST",
               headers: {
@@ -145,35 +142,34 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
                 razorpay_signature: response.razorpay_signature,
               }),
             });
-           
+
             const verificationResult = await verifyResponse.json();
-           console.log("Respi",response)
+            console.log("Respi", response);
             if (verificationResult.success) {
               await fetch(`${API_URL}/order/updateorder/${res._id}`, {
-                method: 'PATCH',
+                method: "PATCH",
                 headers: {
-                  'Content-Type': 'application/json',
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                 transactionId:response.razorpay_payment_id,
-                  paymentStatus:"success",
+                  transactionId: response.razorpay_payment_id,
+                  paymentStatus: "success",
                 }),
               });
               alert("Payment successful! Code unlocked.");
             } else {
               await fetch(`${API_URL}/order/updateorder/${res._id}`, {
-                method: 'PATCH',
+                method: "PATCH",
                 headers: {
-                  'Content-Type': 'application/json',
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                 transactionId:verificationResult.razorpay_payment_id,
-                  paymentStatus:"failed",
+                  transactionId: verificationResult.razorpay_payment_id,
+                  paymentStatus: "failed",
                 }),
               });
               alert("Payment verification failed.");
             }
-           
           },
           prefill: {
             name: user.name,
@@ -197,14 +193,7 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
   return (
     <div className="code-card" key={index}>
       <img src={code.image} alt="Code Preview" className="code-card-image" />
-      {code?.isPaid ? (
-        <div className="addtocart-card">
-          <button onClick={()=>handleUnlockClick(code._id)}>
-            <FaUnlock size={20} />
-            Unlock Code ₹100
-          </button>
-        </div>
-      ) : (
+      {payed || !code?.isPaid ? (
         <div className="code-card-content">
           <h2>Steps to Follow</h2>
           <ol className="code-card-steps">
@@ -214,14 +203,24 @@ const CodeCard = ({ code, index, language, setRefresh }) => {
           </ol>
           <CodeBox code={code.code} language={language} css={code.css} />
         </div>
+      ) : (
+        <div className="addtocart-card">
+          <button onClick={() => handleUnlockClick(code._id)}>
+            <FaUnlock size={20} />
+            Unlock Code ₹100
+          </button>
+        </div>
       )}
-      <div
-        className={`card-cart-icon ${isBookmarked ? "bookmarked-icon" : ""}`}
-        onClick={handleBookmarkClick}
-        style={{ color: isBookmarked ? "gold" : "" }}
-      >
-        <IoMdBookmark size={26} className="icon" />
-      </div>
+
+      {!payed && (
+        <div
+          className={`card-cart-icon ${isBookmarked ? "bookmarked-icon" : ""}`}
+          onClick={handleBookmarkClick}
+          style={{ color: isBookmarked ? "gold" : "" }}
+        >
+          <IoMdBookmark size={26} className="icon" />
+        </div>
+      )}
     </div>
   );
 };

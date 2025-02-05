@@ -7,7 +7,7 @@ import "../styles/MyAccount.css";
 import { useUser } from "./UserContext";
 
 const MyAccount = () => {
-  const [options, setOptions] = useState([]);
+  const [codes, setCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("profile");
   const { user, logout } = useUser();
@@ -78,24 +78,42 @@ const MyAccount = () => {
     }
   };
 
-  const fetchCategory = async () => {
+  const fetchCodes = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/content/options/React/Header`);
+      const response = await fetch(
+        `${API_URL}/order/getorderbyuserid/${user?._id}`
+      );
       if (!response.ok) {
-        throw new Error("Failed to fetch categories");
+        throw new Error("Failed to fetch");
       }
-      const data = await response.json();
-      setOptions(data);
+
+      const orders = await response.json();
+      const validOrders = orders.filter(
+        (order) => order.paymentStatus === "success"
+      );
+
+      // Fetch details for each valid codeId
+      const codeDetailsPromises = validOrders.map((order) =>
+        fetch(`${API_URL}/content/options/${order.codeId}`).then((res) =>
+          res.ok ? res.json() : null
+        )
+      );
+
+      const codes = (await Promise.all(codeDetailsPromises)).filter(
+        (code) => code !== null
+      );
+
+      setCodes(codes);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCategory();
+    fetchCodes();
   }, []);
 
   const language = "javascript";
@@ -117,7 +135,7 @@ const MyAccount = () => {
       setError("New password and confirm password do not match.");
       return;
     }
-  
+
     try {
       const response = await fetch(`${API_URL}/auth/updatepassword`, {
         method: "POST",
@@ -252,10 +270,15 @@ const MyAccount = () => {
             {loading ? (
               <Loading />
             ) : (
-              options.map((code, index) => (
+              codes.map((code, index) => (
                 <React.Fragment key={index}>
-                  <CodeCard code={code} index={index} language={language} />
-                  {index !== options.length - 1 && (
+                  <CodeCard
+                    code={code}
+                    index={index}
+                    language={language}
+                    payed={true}
+                  />
+                  {index !== codes.length - 1 && (
                     <hr style={{ border: "1px solid black" }} />
                   )}
                 </React.Fragment>
