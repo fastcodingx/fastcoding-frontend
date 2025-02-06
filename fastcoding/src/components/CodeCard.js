@@ -94,9 +94,22 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
       addBookmark(code._id);
     }
   };
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => {
+      console.log("Razorpay script loaded successfully.");
+    };
+    document.body.appendChild(script);
 
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   // Handle Unlock Code (Payment)
-  const handleUnlockClick = async (codeId) => {
+  const handleUnlockClick = async (codeId,amount) => {
+
     try {
       const response = await fetch(`${API_URL}/payment/create`, {
         method: "POST",
@@ -104,7 +117,7 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 1,
+          amount: parseInt(amount),
           currency: "INR",
         }),
       });
@@ -205,9 +218,9 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
         </div>
       ) : (
         <div className="addtocart-card">
-          <button onClick={() => handleUnlockClick(code._id)}>
+          <button onClick={() => handleUnlockClick(code._id,code?.amount)}>
             <FaUnlock size={20} />
-            Unlock Code ₹100
+            Unlock Code ₹{code?.amount}
           </button>
         </div>
       )}

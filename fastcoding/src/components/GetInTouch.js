@@ -3,9 +3,12 @@ import "../styles/GetInTouch.css";
 import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import emailjs from "emailjs-com";
 import API_URL from "../config";
+import { useUser } from "./UserContext";
 
 const GetInTouch = () => {
+   const { user, logout } = useUser();
   const [formData, setFormData] = useState({
+    userId:user._id,
     name: "",
     email: "",
     message: "",

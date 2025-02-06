@@ -5,6 +5,7 @@ import Loading from "./Loading";
 import API_URL from "../config";
 import "../styles/MyAccount.css";
 import { useUser } from "./UserContext";
+import ChatSupport from "./ChatSupport";
 
 const MyAccount = () => {
   const [codes, setCodes] = useState([]);
@@ -287,43 +288,7 @@ const MyAccount = () => {
           </div>
         )}
         {activeSection === "supportHistory" && (
-          <div className="support-history-content">
-            <h2>Support History</h2>
-            <div className="messages">
-              {messages.map((message) => (
-                <div key={message.id} className="message">
-                  <p className="supportIdTag">Support Id: #{message.id}</p>
-                  <p className="supportMessagetext">{message.text}</p>
-                  <button onClick={() => handleToggleChat(message.id)}>
-                    Chat
-                  </button>
-                  {message.isChatOpen && (
-                    <div className="chat-box">
-                      <div className="chat-replies">
-                        {message.replies?.map((reply, index) => (
-                          <div
-                            key={index}
-                            className={`reply ${reply.user.toLowerCase()}`}
-                          >
-                            <strong>{reply.user}:</strong>{" "}
-                            <span>{reply.text}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <textarea
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type your message..."
-                      />
-                      <button onClick={() => handleMessageSubmit(message.id)}>
-                        Send
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+           <ChatSupport userId={user?._id}/>
         )}
 
         {activeSection === "logout" && (
