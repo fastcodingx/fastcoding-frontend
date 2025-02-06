@@ -1,194 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { FaUser, FaGift, FaHeadset, FaSignOutAlt } from "react-icons/fa";
-import CodeCard from "./CodeCard";
-import Loading from "./Loading";
-import API_URL from "../config";
 import "../styles/MyAccount.css";
 import { useUser } from "./UserContext";
 import ChatSupport from "./ChatSupport";
+import Profile from "./Profile";
+import MyCodes from "./MyCodes";
+import Logout from "./Logout";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MyAccount = () => {
-  const [codes, setCodes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState("profile");
-  const { user, logout } = useUser();
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      user: "User",
-      text: "I have an issue with my order",
-      isChatOpen: false,
-      replies: [
-        {
-          user: "Admin",
-          text: "Sorry for the inconvenience. Could you provide more details?",
-        },
-      ],
-    },
-    {
-      id: 2,
-      user: "User",
-      text: "I need help with my payment",
-      isChatOpen: false,
-      replies: [
-        {
-          user: "Admin",
-          text: "Please check your payment method. Is everything correct?",
-        },
-      ],
-    },
-  ]);
-
-  const [newMessage, setNewMessage] = useState("");
-
-  const handleToggleChat = (id) => {
-    setMessages(
-      messages.map((message) =>
-        message.id === id
-          ? { ...message, isChatOpen: !message.isChatOpen }
-          : message
-      )
-    );
-  };
-
-  const handleMessageSubmit = (id) => {
-    if (newMessage.trim()) {
-      setMessages(
-        messages.map((message) =>
-          message.id === id
-            ? {
-                ...message,
-                replies: [
-                  ...(message.replies || []),
-                  { user: "User", text: newMessage }, // User sends a message
-                  {
-                    user: "Admin",
-                    text: "This is an admin response to your message.",
-                  }, // Dummy admin reply
-                ],
-              }
-            : message
-        )
-      );
-      setNewMessage("");
-    }
-  };
-
-  const fetchCodes = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `${API_URL}/order/getorderbyuserid/${user?._id}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch");
-      }
-
-      const orders = await response.json();
-      const validOrders = orders.filter(
-        (order) => order.paymentStatus === "success"
-      );
-
-      // Fetch details for each valid codeId
-      const codeDetailsPromises = validOrders.map((order) =>
-        fetch(`${API_URL}/content/options/${order.codeId}`).then((res) =>
-          res.ok ? res.json() : null
-        )
-      );
-
-      const codes = (await Promise.all(codeDetailsPromises)).filter(
-        (code) => code !== null
-      );
-
-      setCodes(codes);
-    } catch (error) {
-      console.error("Error fetching:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCodes();
-  }, []);
-
-  const language = "javascript";
+  const navigate = useNavigate();
+  const { pathname } = useLocation(); // Get the current path
+  const { user } = useUser();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-
-  const handleUpdatePassword = async () => {
-    setError("");
-    setSuccess("");
-
-    if (!oldPassword || !newPassword || !confirmNewPassword) {
-      setError("All fields are required.");
-      return;
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      setError("New password and confirm password do not match.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_URL}/auth/updatepassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user?.email,
-          oldPassword,
-          newPassword,
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to update password.");
-      }
-
-      alert("Password updated successfully.");
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmNewPassword("");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  }, [pathname]);
 
   const menuItems = [
     {
       name: "Profile",
-      id: "profile",
+      path: "/myaccount/profile",
       icon: <FaUser style={{ marginRight: 10 }} />,
     },
     {
       name: "My Codes",
-      id: "myCodes",
+      path: "/myaccount/mycodes",
       icon: <FaGift style={{ marginRight: 10 }} />,
     },
     {
       name: "Support History",
-      id: "supportHistory",
+      path: "/myaccount/chatsupport",
       icon: <FaHeadset style={{ marginRight: 10 }} />,
     },
     {
       name: "Logout",
-      id: "logout",
+      path: "/myaccount/logout",
       icon: <FaSignOutAlt style={{ marginRight: 10 }} />,
     },
   ];
 
-  const handleSectionChange = (id) => {
-    setActiveSection(id);
+  const handleNavigation = (path) => {
+    navigate(path);
   };
 
   return (
@@ -197,9 +50,9 @@ const MyAccount = () => {
         <ul>
           {menuItems.map((item) => (
             <li
-              key={item.id}
-              className={activeSection === item.id ? "active" : ""}
-              onClick={() => handleSectionChange(item.id)}
+              key={item.path}
+              className={pathname === item.path ? "active" : ""}
+              onClick={() => handleNavigation(item.path)}
             >
               {item.icon}
               {item.name}
@@ -209,97 +62,12 @@ const MyAccount = () => {
       </div>
 
       <div className="maincontent">
-        {activeSection === "profile" && (
-          <div className="profile-content">
-            <h2
-              style={{
-                textAlign: "center",
-                fontWeight: "600",
-                fontSize: "24px",
-              }}
-            >
-              Manage Your Profile
-            </h2>
-            <div className="profile-info">
-              <div>
-                <label>Username:</label>
-                <input
-                  type="text"
-                  value={user?.email?.split("@")[0] || "username"}
-                  readOnly
-                />
-              </div>
-              <div>
-                <label>Email:</label>
-                <input type="email" value={user?.email || "email"} readOnly />
-              </div>
-              <div style={{ marginTop: 14, marginBottom: 10 }}>
-                <h3>Change your password to keep your account secure</h3>
-              </div>
-              <div>
-                <label>Old Password:</label>
-                <input
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <label>New Password:</label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <label>Confirm New Password:</label>
-                <input
-                  type="password"
-                  value={confirmNewPassword}
-                  onChange={(e) => setConfirmNewPassword(e.target.value)}
-                />
-              </div>
-              <div className="saveChangesBtn">
-                <button onClick={handleUpdatePassword}>Update Password</button>
-              </div>
-            </div>
-          </div>
+        {pathname === "/myaccount/profile" && <Profile />}
+        {pathname === "/myaccount/mycodes" && <MyCodes />}
+        {pathname === "/myaccount/chatsupport" && (
+          <ChatSupport userId={user?._id} />
         )}
-        {activeSection === "myCodes" && (
-          <div className="my-codes-content">
-            {loading ? (
-              <Loading />
-            ) : (
-              codes.map((code, index) => (
-                <React.Fragment key={index}>
-                  <CodeCard
-                    code={code}
-                    index={index}
-                    language={language}
-                    payed={true}
-                  />
-                  {index !== codes.length - 1 && (
-                    <hr style={{ border: "1px solid black" }} />
-                  )}
-                </React.Fragment>
-              ))
-            )}
-          </div>
-        )}
-        {activeSection === "supportHistory" && (
-           <ChatSupport userId={user?._id}/>
-        )}
-
-        {activeSection === "logout" && (
-          <div className="logout-content">
-            <h2>Are you sure you want to log out?</h2>
-            <button onClick={() => logout()}>
-              <FaSignOutAlt />
-              Logout
-            </button>
-          </div>
-        )}
+        {pathname === "/myaccount/logout" && <Logout />}
       </div>
     </div>
   );

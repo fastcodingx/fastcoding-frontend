@@ -20,3 +20,9 @@
 .footerContainer-sec-1 > ul > li:hover {
   color: lightgray;
 }
+
+@media (max-width: 768px) {
+  #footerContainer {
+    display: none;
+  }
+}

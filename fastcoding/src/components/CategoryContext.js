@@ -5,8 +5,8 @@ const CategoryContext = createContext();
 export const useCategory = () => useContext(CategoryContext);
 
 export const CategoryProvider = ({ children }) => {
-  const [selectedCategory, setSelectedCategory] = useState("React");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("Header");
+  const [selectedCategory, setSelectedCategory] = useState("Angular");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("Footer");
 
   const updateCategory = (category, subcategory) => {
     setSelectedCategory(category);

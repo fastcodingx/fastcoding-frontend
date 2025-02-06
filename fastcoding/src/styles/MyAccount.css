@@ -47,7 +47,6 @@
 
 .maincontent {
   flex: 1;
-  padding-left: 290px;
 }
 
 h2 {
@@ -231,4 +230,26 @@ button:hover {
 }
 .logout-content > button:hover {
   background-color: red;
+}
+
+@media (max-width: 768px) {
+  .profilesidebar {
+    display: none;
+  }
+  .maincontent {
+    flex: 1;
+    padding-left: 0px;
+  }
+  .my-account-container {
+    margin-top: 20px;
+  }
+  .message {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    column-gap: 20px;
+  }
 }

@@ -21,61 +21,6 @@
   width: 250px;
   height: auto;
 }
-.searchContainer {
-  width: 500px;
-  display: flex;
-  align-items: center;
-  box-shadow:
-    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
-  border-radius: 8px;
-  background-color: white;
-}
-.searchContainer > input {
-  flex: 1;
-  padding: 10px 0;
-  border: none;
-  padding-left: 15px;
-  border-radius: 6px;
-  background-color: transparent;
-  outline: none;
-  margin: auto;
-}
-
-.searchContainer > input::placeholder {
-  color: grey;
-  font-size: 16px;
-  font-weight: lighter;
-}
-
-.searchContainer > input::placeholder {
-  color: grey;
-  font-size: 16px;
-  font-weight: lighter;
-}
-.searchContainer > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: var(--primary);
-  border-radius: 6px;
-  box-shadow:
-    rgba(0, 0, 0, 0.16) 0px 3px 6px,
-    rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  cursor: pointer;
-  color: white;
-  border: 1px solid var(--primary);
-}
-.searchContainer > div:hover {
-  background-color: var(--secondary);
-  color: var(--primary);
-  border-radius: 6px;
-  border: 1px solid var(--primary);
-  transition:
-    color 0.3s,
-    background-color 0.8s;
-}
 .navLinks {
   display: flex;
   align-items: center;
@@ -133,4 +78,65 @@
   color: var(--primary);
   border: 1px solid var(--primary);
   background-color: var(--secondary);
+}
+
+.menuIcon {
+  display: none;
+}
+
+.mobileViewOptions {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .headerContainer {
+    width: 100%;
+    height: 60px;
+    background-color: #fff;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobileViewOptions {
+    display: block;
+  }
+
+  .menuIcon {
+    display: block;
+  }
+
+  .navLinks {
+    display: none;
+  }
+  .logoImage {
+    width: 180px;
+  }
+  .authButton {
+    padding: 7px 14px;
+  }
+  .accountDropdown {
+    position: absolute;
+    right: 5px;
+    top: 50px;
+    background-color: var(--primary);
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .accountDropdown > ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+  }
+  .accountDropdown > ul > li {
+    color: white;
+    padding: 5px 10px;
+  }
 }

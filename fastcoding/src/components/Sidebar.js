@@ -7,7 +7,7 @@ import "../styles/Sidebar.css";
 import { FaReact } from "react-icons/fa";
 import { useCategory } from "./CategoryContext";
 
-function Sidebar() {
+function Sidebar({ isSidebarOpen }) {
   const { updateCategory } = useCategory();
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,7 +68,7 @@ function Sidebar() {
   }
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
       <ul>
         {category.map((el, id) => (
           <li key={id} className={activeItem === el.category ? "active" : ""}>

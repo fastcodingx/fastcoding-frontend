@@ -105,3 +105,20 @@ pre {
   background-color: var(--primary);
   color: #fff;
 }
+
+@media (max-width: 768px) {
+  .code-card-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .card-cart-icon {
+    top: 5px;
+    right: 5px;
+    padding: 3px 6px;
+    border-radius: 50%;
+  }
+  .card-cart-icon > svg {
+    width: 18px;
+  }
+}

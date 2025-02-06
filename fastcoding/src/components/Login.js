@@ -92,7 +92,6 @@ const Login = () => {
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
-
           <div className="login-footer-content">
             <div className="login-content-google">
               <p style={{ fontSize: "20px" }}>Sign in with Google</p>

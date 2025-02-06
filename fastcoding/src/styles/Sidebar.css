@@ -79,3 +79,14 @@
   color: var(--primary);
   background-color: var(--secondary);
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    z-index: 999;
+    top: 60px;
+    left: -290px;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
 // Initialize Socket.IO connection
-const socket = io("http://localhost:8080"); // Update with your backend URL
+const socket = io("https://fastcoding-backend.onrender.com");
 
 const ChatSupport = ({ userId }) => {
   const [messages, setMessages] = useState([]);
@@ -13,10 +13,12 @@ const ChatSupport = ({ userId }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/contact/getallcontactbyuserid/${userId}`);
+        const response = await fetch(
+          `https://fastcoding-backend.onrender.com/api/contact/getallcontactbyuserid/${userId}`
+        );
         const data = await response.json();
-          console.log("Res",response)
-          console.log("Data",data)
+        console.log("Res", response);
+        console.log("Data", data);
         if (response.ok && data.length > 0) {
           setMessages(data);
         } else {
@@ -35,19 +37,25 @@ const ChatSupport = ({ userId }) => {
       setMessages((prevMessages) =>
         prevMessages.map((msg) =>
           msg._id === data.contactId
-            ? { ...msg, chat: [...msg.chat, { sender: data.sender, message: data.message }] }
+            ? {
+                ...msg,
+                chat: [
+                  ...msg.chat,
+                  { sender: data.sender, message: data.message },
+                ],
+              }
             : msg
         )
       );
     };
-  
+
     socket.on("receiveMessage", handleReceiveMessage);
-  
+
     return () => {
       socket.off("receiveMessage", handleReceiveMessage); // Cleanup listener on unmount
     };
   }, []); // Empty dependency ensures it runs only once
-  
+
   // Handle opening chat and setting contactId
   const handleOpenChat = (contactId) => {
     setActiveChatId(activeChatId === contactId ? null : contactId);
@@ -86,8 +94,12 @@ const ChatSupport = ({ userId }) => {
               <div className="chat-box">
                 <div className="chat-replies">
                   {message.chat?.map((reply, index) => (
-                    <div key={index} className={`reply ${reply.sender.toLowerCase()}`}>
-                      <strong>{reply.sender}:</strong> <span>{reply.message}</span>
+                    <div
+                      key={index}
+                      className={`reply ${reply.sender.toLowerCase()}`}
+                    >
+                      <strong>{reply.sender}:</strong>{" "}
+                      <span>{reply.message}</span>
                     </div>
                   ))}
                 </div>
