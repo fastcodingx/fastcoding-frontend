@@ -36,32 +36,47 @@ function Header() {
         <img src={Logo} alt="Logo" className="logoImage" />
       </div>
       <div className="mobileViewOptions">
-        <FaHandshake
-          size={24}
-          className="icon"
-          style={{ marginRight: 10 }}
-          onClick={() => handleNavigation("/getintouch")}
-        />
-        <IoMdBookmark
-          size={24}
-          className="icon"
-          style={{ marginRight: 10 }}
-          onClick={() => handleNavigation("/mybookmark")}
-        />
+        {!user && (
+          <button
+            className="authButton"
+            style={{ marginRight: 5 }}
+            onClick={() => handleNavigation("/getintouch")}
+          >
+            Get In Touch
+          </button>
+        )}
+        {user && (
+          <FaHandshake
+            size={24}
+            className="icon"
+            style={{ marginRight: 8 }}
+            onClick={() => handleNavigation("/getintouch")}
+          />
+        )}
+
+        {user && (
+          <IoMdBookmark
+            size={24}
+            className="icon"
+            style={{ marginRight: 10 }}
+            onClick={() => handleNavigation("/mybookmark")}
+          />
+        )}
         {!user && (
           <button
             className="authButton"
             onClick={() => handleNavigation("/login")}
           >
-            <FiLogIn size={24} className="icon" style={{ marginRight: 10 }} />
             Login
           </button>
         )}
-        <MdAccountCircle
-          size={24}
-          className="icon"
-          onClick={handleDropdownToggle}
-        />
+        {user && (
+          <MdAccountCircle
+            size={24}
+            className="icon"
+            onClick={handleDropdownToggle}
+          />
+        )}
         {isDropdownOpen && (
           <div className="accountDropdown">
             <ul>
@@ -108,7 +123,7 @@ function Header() {
             onClick={() => handleNavigation("/getintouch")}
           >
             <FaHandshake
-              size={22}
+              size={24}
               className="icon"
               style={{ marginRight: 8 }}
             />
@@ -120,7 +135,7 @@ function Header() {
               onClick={() => handleNavigation("/mybookmark")}
             >
               <IoMdBookmark
-                size={22}
+                size={24}
                 className="icon"
                 style={{ marginRight: 8 }}
               />
@@ -135,7 +150,7 @@ function Header() {
                 onClick={() => handleNavigation("/register")}
               >
                 <FaUserPlus
-                  size={22}
+                  size={24}
                   className="icon"
                   style={{ marginRight: 8 }}
                 />
@@ -146,7 +161,7 @@ function Header() {
                 onClick={() => handleNavigation("/login")}
               >
                 <FiLogIn
-                  size={22}
+                  size={24}
                   className="icon"
                   style={{ marginRight: 8 }}
                 />

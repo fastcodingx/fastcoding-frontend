@@ -83,7 +83,7 @@
 @media (max-width: 768px) {
   .sidebar {
     z-index: 999;
-    top: 60px;
+    top: 50px;
     left: -290px;
   }
   .sidebar.open {

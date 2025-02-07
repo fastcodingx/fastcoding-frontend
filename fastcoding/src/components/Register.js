@@ -77,9 +77,9 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-     if(!otpValidated){
-      alert("Please Validate Otp!")
-     }
+    if (!otpValidated) {
+      alert("Please Validate Otp!");
+    }
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -158,13 +158,15 @@ const Register = () => {
                   onChange={(e) => setOtp(e.target.value)}
                   required
                 />
-               { !otpValidated && <button
-                  className="login-content-btn"
-                  type="button"
-                  onClick={handleValidateOtp}
-                >
-                  Validate OTP
-                </button>}
+                {!otpValidated && (
+                  <button
+                    className="login-content-btn"
+                    type="button"
+                    onClick={handleValidateOtp}
+                  >
+                    Validate OTP
+                  </button>
+                )}
               </div>
             )}
             <div className="login-content-input-1">
@@ -200,8 +202,11 @@ const Register = () => {
               <p style={{ fontSize: "20px" }}>Sign in with Google</p>
               <FcGoogle style={{ height: "30px", width: "30px" }} />
             </div>
-            <p style={{ marginTop: "20px", color: "var(--secondary)", fontSize: "20px" }}>
-              I have an account? <Link to={"/login"} className="login-forgot">Login</Link>
+            <p style={{ marginTop: "20px", color: "var(--secondary)" }}>
+              I have an account?{" "}
+              <Link to={"/login"} className="login-forgot">
+                Login
+              </Link>
             </p>
           </div>
         </div>

@@ -6,9 +6,9 @@ import API_URL from "../config";
 import { useUser } from "./UserContext";
 
 const GetInTouch = () => {
-   const { user, logout } = useUser();
+  const { user, logout } = useUser();
   const [formData, setFormData] = useState({
-    userId:user._id,
+    userId: user?._id || "Na",
     name: "",
     email: "",
     message: "",

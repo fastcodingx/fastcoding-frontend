@@ -98,10 +98,10 @@ const Login = () => {
               <FcGoogle style={{ height: "30px", width: "30px" }} />
             </div>
             <p
+            
               style={{
                 marginTop: "20px",
                 color: "var(--secondary)",
-                fontSize: "20px",
               }}
             >
               Don't have an account?{" "}
