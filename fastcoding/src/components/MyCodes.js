@@ -52,7 +52,7 @@ const MyCodes = () => {
     <div className="my-codes-content">
       {loading ? (
         <Loading />
-      ) : (
+      ) : codes.length > 0 ? (
         codes.map((code, index) => (
           <React.Fragment key={index}>
             <CodeCard
@@ -66,6 +66,25 @@ const MyCodes = () => {
             )}
           </React.Fragment>
         ))
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "80vh",
+          }}
+        >
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "22px",
+              color: "red",
+            }}
+          >
+            You have not unlocked any codes yet.
+          </p>
+        </div>
       )}
     </div>
   );

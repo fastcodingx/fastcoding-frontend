@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-// Initialize Socket.IO connection
 const socket = io("https://fastcoding-backend.onrender.com");
 
 const ChatSupport = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [activeChatId, setActiveChatId] = useState(null); // Stores the active chat ID
+  const [activeChatId, setActiveChatId] = useState(null);
 
-  // Fetch messages from backend
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -52,16 +50,14 @@ const ChatSupport = ({ userId }) => {
     socket.on("receiveMessage", handleReceiveMessage);
 
     return () => {
-      socket.off("receiveMessage", handleReceiveMessage); // Cleanup listener on unmount
+      socket.off("receiveMessage", handleReceiveMessage);
     };
-  }, []); // Empty dependency ensures it runs only once
+  }, []);
 
-  // Handle opening chat and setting contactId
   const handleOpenChat = (contactId) => {
     setActiveChatId(activeChatId === contactId ? null : contactId);
   };
 
-  // Handle sending messages
   const handleMessageSubmit = () => {
     if (newMessage.trim() && activeChatId) {
       const chatMessage = {
@@ -70,9 +66,9 @@ const ChatSupport = ({ userId }) => {
         message: newMessage,
       };
 
-      socket.emit("sendMessage", chatMessage); // Send message to backend
+      socket.emit("sendMessage", chatMessage);
 
-      setNewMessage(""); // Clear input field
+      setNewMessage("");
     }
   };
 
@@ -84,7 +80,7 @@ const ChatSupport = ({ userId }) => {
       ) : (
         messages.map((message) => (
           <div key={message._id} className="message">
-            <p className="supportIdTag">Support ID: #{message._id}</p>
+            <p className="supportIdTag">Support ID: {message._id}</p>
             <p className="supportMessagetext">{message.message}</p>
             <button onClick={() => handleOpenChat(message._id)}>
               {activeChatId === message._id ? "Close Chat" : "Chat"}
