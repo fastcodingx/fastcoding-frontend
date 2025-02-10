@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import API_URL from "../config";
 import { useNavigate, useLocation } from "react-router-dom";
-
 import "../styles/Sidebar.css";
 import { FaReact } from "react-icons/fa";
 import { useCategory } from "./CategoryContext";
+import Loading from "./Loading";
 
 function Sidebar({ isSidebarOpen }) {
   const { updateCategory } = useCategory();
@@ -14,6 +14,7 @@ function Sidebar({ isSidebarOpen }) {
   const [activeItem, setActiveItem] = useState("React");
   const [openDropdown, setOpenDropdown] = useState({});
   const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchCategory = async () => {
     try {
@@ -24,7 +25,6 @@ function Sidebar({ isSidebarOpen }) {
       const data = await response.json();
       setCategory(data);
 
-      // Initialize all dropdowns as open
       const defaultOpen = data.reduce((acc, curr) => {
         acc[curr.category] = true;
         return acc;
@@ -32,6 +32,8 @@ function Sidebar({ isSidebarOpen }) {
       setOpenDropdown(defaultOpen);
     } catch (error) {
       console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,11 +41,13 @@ function Sidebar({ isSidebarOpen }) {
     fetchCategory();
   }, []);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   const handleClick = (categoryName) => {
     setActiveItem(categoryName);
     updateCategory(categoryName, null);
-
-    // Toggle dropdown open/close
     setOpenDropdown((prev) => ({
       ...prev,
       [categoryName]: !prev[categoryName],

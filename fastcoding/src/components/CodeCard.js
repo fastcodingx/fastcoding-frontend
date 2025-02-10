@@ -5,6 +5,7 @@ import { FaUnlock } from "react-icons/fa";
 import { IoMdBookmark } from "react-icons/io";
 import API_URL from "../config";
 import { useUser } from "./UserContext";
+import { useNavigate } from "react-router-dom";
 
 const CodeCard = ({ code, index, language, setRefresh, payed }) => {
   const [bookmark, setBookmark] = useState([]);
@@ -107,9 +108,13 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
       document.body.removeChild(script);
     };
   }, []);
+  const navigate = useNavigate();
   // Handle Unlock Code (Payment)
   const handleUnlockClick = async (codeId,amount) => {
-
+     if(!user){
+      alert("Please login first!")
+      navigate("/login");
+     }
     try {
       const response = await fetch(`${API_URL}/payment/create`, {
         method: "POST",

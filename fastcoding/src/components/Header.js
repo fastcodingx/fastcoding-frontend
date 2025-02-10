@@ -12,6 +12,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 
 function Header() {
+  const isMobile = window.innerWidth<=768;
   const navigate = useNavigate();
   const { user } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

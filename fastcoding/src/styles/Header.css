@@ -124,7 +124,8 @@
     width: 150px;
   }
   .authButton {
-    padding: 7px 14px;
+    padding: 7px;
+    font-size: 13px;
     margin-right: 0;
   }
   .accountDropdown {
