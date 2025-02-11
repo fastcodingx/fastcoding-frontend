@@ -211,6 +211,16 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
   return (
     <div className="code-card" key={index}>
       <img src={code.image} alt="Code Preview" className="code-card-image" />
+     <iframe 
+    src={code.image}
+    width="640" 
+    height="480" 
+    allow="autoplay">
+</iframe>
+<video width="640" height="480" controls>
+    <source src={code.image} type="video/mp4">
+    Your browser does not support the video tag.
+</video>
       {payed || !code?.isPaid ? (
         <div className="code-card-content">
           <h2>Steps to Follow</h2>
