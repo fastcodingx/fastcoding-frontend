@@ -213,8 +213,8 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
     {code.image?<img src={code.image} alt="Code Preview" className="code-card-image" />:
      <iframe 
     src={code.videoUrl}
-    width="640" 
-    height="480" 
+    width="100%" 
+    height="400px" 
     allow="autoplay">
 </iframe>}
       {payed || !code?.isPaid ? (
