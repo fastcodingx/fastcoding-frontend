@@ -25,7 +25,7 @@ const ChatSupport = ({ userId }) => {
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
-
+    }
     fetchMessages();
   }, [userId]);
 
