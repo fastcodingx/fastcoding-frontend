@@ -46,7 +46,7 @@ const ChatSupport = ({ userId }) => {
           userId={userId}
         />
       ) : // Show list of chat summaries
-      messages.length === 0 ? (
+      messages?.length === 0 ? (
         <p>No support tickets found. Start a new ticket if you need assistance!</p>
       ) : (
         messages.map((message) => (
