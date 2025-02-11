@@ -210,13 +210,13 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
 
   return (
     <div className="code-card" key={index}>
-      <img src={code.image} alt="Code Preview" className="code-card-image" />
+    {code.image?<img src={code.image} alt="Code Preview" className="code-card-image" />:
      <iframe 
-    src="https://drive.google.com/file/d/13U4LmI1A-asoe8X9yGNq2DoQD1DX6VIR/preview"
+    src={code.videoUrl}
     width="640" 
     height="480" 
     allow="autoplay">
-</iframe>
+</iframe>}
       {payed || !code?.isPaid ? (
         <div className="code-card-content">
           <h2>Steps to Follow</h2>
