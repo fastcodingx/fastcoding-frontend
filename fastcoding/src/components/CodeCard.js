@@ -212,7 +212,7 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
     <div className="code-card" key={index}>
       <img src={code.image} alt="Code Preview" className="code-card-image" />
      <iframe 
-    src={code.image}
+    src="https://drive.google.com/file/d/13U4LmI1A-asoe8X9yGNq2DoQD1DX6VIR/preview"
     width="640" 
     height="480" 
     allow="autoplay">
