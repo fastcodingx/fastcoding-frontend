@@ -8,6 +8,7 @@ import { useUser } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 const CodeCard = ({ code, index, language, setRefresh, payed }) => {
+  const isMobile = window.innerWidth<=768;
   const [bookmark, setBookmark] = useState([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [bookmarkId, setBookmarkId] = useState(null);
@@ -211,10 +212,10 @@ const CodeCard = ({ code, index, language, setRefresh, payed }) => {
   return (
     <div className="code-card" key={index}>
     {code.image?<img src={code.image} alt="Code Preview" className="code-card-image" />:
-     <iframe 
+    <iframe 
     src={code.videoUrl}
     width="100%" 
-    height="400px" 
+    height={isMobile ? "200px" : "400px"} 
     allow="autoplay">
 </iframe>}
       {payed || !code?.isPaid ? (
