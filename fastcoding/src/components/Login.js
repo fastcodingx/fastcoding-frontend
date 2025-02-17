@@ -82,6 +82,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                style={{ marginTop: 0 }}
               />
             </div>
             <button
@@ -93,12 +94,11 @@ const Login = () => {
             </button>
           </form>
           <div className="login-footer-content">
-            <div className="login-content-google">
+            {/* <div className="login-content-google">
               <p style={{ fontSize: "20px" }}>Sign in with Google</p>
               <FcGoogle style={{ height: "30px", width: "30px" }} />
-            </div>
+            </div> */}
             <p
-            
               style={{
                 marginTop: "20px",
                 color: "var(--secondary)",

@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { FaHandshake, FaUserPlus } from "react-icons/fa";
 import "../styles/Header.css";
 import Logo from "../assets/FastCoding.png";
-import { GoSearch } from "react-icons/go";
 import { MdAccountCircle } from "react-icons/md";
 import { IoMdBookmark } from "react-icons/io";
 import { FiLogIn } from "react-icons/fi";
 import { useUser } from "./UserContext";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
+import { AiOutlineClose } from "react-icons/ai";
 
 function Header() {
-  const isMobile = window.innerWidth<=768;
+  const isMobile = window.innerWidth <= 768;
   const navigate = useNavigate();
   const { user } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,7 +32,20 @@ function Header() {
 
   return (
     <div className="headerContainer">
-      <GiHamburgerMenu size={26} className="menuIcon" onClick={toggleSidebar} />
+      {isSidebarOpen ? (
+        <AiOutlineClose
+          size={26}
+          className="menuIcon"
+          onClick={toggleSidebar}
+        />
+      ) : (
+        <GiHamburgerMenu
+          size={26}
+          className="menuIcon"
+          onClick={toggleSidebar}
+        />
+      )}
+
       <div className="logo" onClick={() => handleNavigation("/")}>
         <img src={Logo} alt="Logo" className="logoImage" />
       </div>
@@ -187,7 +200,12 @@ function Header() {
           </div>
         )}
       </nav>
-      {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
+      {isSidebarOpen && (
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+      )}
     </div>
   );
 }

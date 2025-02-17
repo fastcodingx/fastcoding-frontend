@@ -139,10 +139,12 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                style={{ marginTop: 0 }}
               />
             </div>
             {!otpSent ? (
               <button
+                style={{ marginTop: 0 }}
                 className="login-content-btn"
                 type="button"
                 onClick={handleSendOtp}
@@ -187,6 +189,7 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
+                style={{ marginTop: 0 }}
               />
             </div>
             <button
@@ -198,10 +201,10 @@ const Register = () => {
             </button>
           </form>
           <div className="login-footer-content">
-            <div className="login-content-google">
+            {/* <div className="login-content-google">
               <p style={{ fontSize: "20px" }}>Sign in with Google</p>
               <FcGoogle style={{ height: "30px", width: "30px" }} />
-            </div>
+            </div> */}
             <p style={{ marginTop: "20px", color: "var(--secondary)" }}>
               I have an account?{" "}
               <Link to={"/login"} className="login-forgot">

@@ -7,7 +7,18 @@ import { FaReact } from "react-icons/fa";
 import { useCategory } from "./CategoryContext";
 import Loading from "./Loading";
 
-function Sidebar({ isSidebarOpen }) {
+function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { updateCategory } = useCategory();
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,6 +68,9 @@ function Sidebar({ isSidebarOpen }) {
   const handleSubcategoryClick = (subcategoryName) => {
     updateCategory(activeItem, subcategoryName);
     navigate("/");
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    }
   };
 
   const hiddenRoutes = [
