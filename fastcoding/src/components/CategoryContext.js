@@ -6,7 +6,7 @@ export const useCategory = () => useContext(CategoryContext);
 
 export const CategoryProvider = ({ children }) => {
   const [selectedCategory, setSelectedCategory] = useState("React");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("Caraousel");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("Carousel");
 
   const updateCategory = (category, subcategory) => {
     setSelectedCategory(category);
