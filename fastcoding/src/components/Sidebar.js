@@ -26,6 +26,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const [openDropdown, setOpenDropdown] = useState({});
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeSubcategory, setActiveSubcategory] = useState("Carousel");
 
   const fetchCategory = async () => {
     try {
@@ -66,6 +67,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   };
 
   const handleSubcategoryClick = (subcategoryName) => {
+    setActiveSubcategory(subcategoryName);
     updateCategory(activeItem, subcategoryName);
     navigate("/");
     if (isMobile) {
@@ -111,7 +113,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 {el?.subcategories.map((option, index) => (
                   <li
                     key={index}
-                    className="dropdown-item"
+                    className={`dropdown-item ${activeSubcategory === option?.name ? "active" : ""}`}
                     onClick={() => handleSubcategoryClick(option?.name)}
                   >
                     {option?.name}
