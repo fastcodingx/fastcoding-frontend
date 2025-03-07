@@ -96,7 +96,8 @@ const GetInTouch = () => {
 
       <div className="contact-icons">
         <a
-          href="https://wa.me/+919082846069"
+          //href="https://wa.me/+91908284606"
+  href="#"
           target="_blank"
           rel="noopener noreferrer"
           className="contact-item"
